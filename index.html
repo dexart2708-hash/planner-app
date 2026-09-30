@@ -281,9 +281,9 @@
     .task {
       display: flex; gap: 14px; padding: 16px 18px;
       background: var(--surface-solid); border: 1px solid var(--border);
-      border-radius: 12px; transition: all var(--transition);
+      border-radius: 12px;
       border-left: 4px solid var(--border-strong);
-      animation: fadeInUp var(--transition-slow) both;
+      transition: opacity 0.25s ease, border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease, transform 0.15s ease;
     }
     .task:hover { box-shadow: var(--shadow-md); border-color: var(--border-strong); transform: translateY(-1px); }
     .task.priority-high { border-left-color: var(--high); }
