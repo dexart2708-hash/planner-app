@@ -106,7 +106,7 @@
       background: linear-gradient(180deg, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0) 30%, rgba(255,255,255,0) 70%, rgba(255,255,255,0.25) 100%);
     }
     [data-theme="dark"] body::after { opacity: 0; }
-    .container { max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; }
+    .container { max-width: 1400px; margin: 0 auto; position: relative; z-index: 1; }
 
     .theme-toggle {
       width: 44px; height: 44px; border-radius: 50%;
@@ -160,10 +160,47 @@
     @keyframes slideIn { from { transform: translateX(110%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
     @keyframes slideOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(110%); opacity: 0; } }
 
+    /* ==== ДВУХКОЛОНОЧНАЯ РАСКЛАДКА ==== */
+    .main-layout {
+      display: grid;
+      grid-template-columns: minmax(360px, 460px) 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+    .left-col, .right-col {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      min-width: 0;
+    }
+    .main-layout .card {
+      margin-bottom: 0;
+    }
+    /* Левая колонка — прилипающая */
+    .left-col {
+      position: sticky;
+      top: 20px;
+      max-height: calc(100vh - 40px);
+      overflow-y: auto;
+      padding-right: 4px;
+      scrollbar-width: thin;
+    }
+    .left-col::-webkit-scrollbar { width: 6px; }
+    .left-col::-webkit-scrollbar-track { background: transparent; }
+    .left-col::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 3px; }
+
+    /* Правая колонка — растягивается на всю высоту */
+    .right-col {
+      min-height: calc(100vh - 200px);
+    }
+    .right-col .card:last-child {
+      flex: 1;
+    }
+
     .card {
       background: var(--surface); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
       border: 1px solid var(--card-border); border-radius: 16px;
-      padding: 24px; margin-bottom: 20px; box-shadow: var(--shadow-sm);
+      padding: 24px; box-shadow: var(--shadow-sm);
       animation: fadeInUp var(--transition-slow) both;
     }
     .card-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; }
@@ -264,8 +301,8 @@
     }
     .filter-tab.active .count { background: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%); color: #fff; }
 
-    .search-row { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; align-items: center; }
-    .search-wrap { position: relative; display: flex; align-items: center; flex: 1; min-width: 240px; }
+    .search-row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+    .search-wrap { position: relative; display: flex; align-items: center; flex: 1; min-width: 200px; }
     .search-icon { position: absolute; left: 14px; width: 16px; height: 16px; color: var(--text-subtle); pointer-events: none; z-index: 1; }
     .search-input { padding-left: 40px; padding-right: 44px; min-height: 44px; font-size: 0.875rem; background: var(--surface-alt); }
     .search-input:focus { background: var(--surface-solid); }
@@ -409,6 +446,9 @@
         padding-bottom: 12px !important;
       }
       .page-title { color: #000 !important; -webkit-text-fill-color: #000 !important; font-size: 1.5rem !important; }
+      .main-layout { display: block !important; }
+      .left-col { display: none !important; }
+      .right-col { min-height: auto !important; }
       .card {
         background: #fff !important; border: 1px solid #ddd !important;
         box-shadow: none !important; padding: 12px 0 !important;
@@ -426,6 +466,20 @@
       .task.done .task-title { text-decoration: line-through; }
       .task-meta-item { border: 1px solid #ddd !important; }
       .task-body { color: #000 !important; }
+    }
+
+    @media (max-width: 1000px) {
+      .main-layout {
+        grid-template-columns: 1fr;
+      }
+      .left-col {
+        position: static;
+        max-height: none;
+        overflow-y: visible;
+      }
+      .right-col {
+        min-height: auto;
+      }
     }
 
     @media (max-width: 720px) {
@@ -488,128 +542,149 @@
     <button id="notifBtn" style="min-height:40px;">Разрешить</button>
   </div>
 
-  <div class="card progress-card">
-    <div class="progress-header">
-      <div>
-        <div class="progress-label">Прогресс на сегодня</div>
-        <div class="progress-value" id="progressPercent">0%</div>
-      </div>
-      <div style="text-align:right;">
-        <div class="progress-label">Выполнено</div>
-        <div class="progress-value"><span id="doneCount">0</span> <span>из</span> <span id="totalCount">0</span></div>
-      </div>
-    </div>
-    <div class="progress-bar">
-      <div class="progress-fill" id="progressFill"></div>
-    </div>
-    <div class="progress-stats">
-      <div class="progress-stat">
-        <span class="progress-stat-label">🔴 Высокий</span>
-        <span class="progress-stat-value high" id="highCount">0</span>
-      </div>
-      <div class="progress-stat">
-        <span class="progress-stat-label">🟡 Средний</span>
-        <span class="progress-stat-value medium" id="mediumCount">0</span>
-      </div>
-      <div class="progress-stat">
-        <span class="progress-stat-label">🟢 Низкий</span>
-        <span class="progress-stat-value low" id="lowCount">0</span>
-      </div>
-    </div>
-  </div>
+  <!-- Двухколоночная раскладка -->
+  <div class="main-layout">
 
-  <div class="card" id="formCard">
-    <div class="card-header">
-      <div class="card-title" id="formTitle">Новая задача</div>
-    </div>
-    <form id="addForm">
-      <div class="row">
-        <div class="field" style="flex:3;">
-          <label>Что нужно сделать</label>
-          <input type="text" id="title" placeholder="Например: Позвонить врачу" required>
+    <!-- ЛЕВАЯ КОЛОНКА: прогресс + форма -->
+    <div class="left-col">
+
+      <div class="card progress-card">
+        <div class="progress-header">
+          <div>
+            <div class="progress-label">Прогресс на сегодня</div>
+            <div class="progress-value" id="progressPercent">0%</div>
+          </div>
+          <div style="text-align:right;">
+            <div class="progress-label">Выполнено</div>
+            <div class="progress-value"><span id="doneCount">0</span> <span>из</span> <span id="totalCount">0</span></div>
+          </div>
         </div>
-        <div class="field">
-          <label>Дата</label>
-          <input type="date" id="date" required>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill"></div>
         </div>
-        <div class="field">
-          <label>Время</label>
-          <input type="time" id="time">
+        <div class="progress-stats">
+          <div class="progress-stat">
+            <span class="progress-stat-label">🔴 Высокий</span>
+            <span class="progress-stat-value high" id="highCount">0</span>
+          </div>
+          <div class="progress-stat">
+            <span class="progress-stat-label">🟡 Средний</span>
+            <span class="progress-stat-value medium" id="mediumCount">0</span>
+          </div>
+          <div class="progress-stat">
+            <span class="progress-stat-label">🟢 Низкий</span>
+            <span class="progress-stat-value low" id="lowCount">0</span>
+          </div>
         </div>
       </div>
-      <div class="row" style="margin-top:14px;">
-        <div class="field">
-          <label>Приоритет</label>
-          <select id="priority">
-            <option value="low">🟢 Низкий</option>
-            <option value="medium">🟡 Средний</option>
-            <option value="high">🔴 Высокий</option>
+
+      <div class="card" id="formCard">
+        <div class="card-header">
+          <div class="card-title" id="formTitle">Новая задача</div>
+        </div>
+        <form id="addForm">
+          <div class="row">
+            <div class="field" style="flex:3; min-width: 200px;">
+              <label>Что нужно сделать</label>
+              <input type="text" id="title" placeholder="Например: Позвонить врачу" required>
+            </div>
+          </div>
+          <div class="row" style="margin-top:14px;">
+            <div class="field">
+              <label>Дата</label>
+              <input type="date" id="date" required>
+            </div>
+            <div class="field">
+              <label>Время</label>
+              <input type="time" id="time">
+            </div>
+          </div>
+          <div class="row" style="margin-top:14px;">
+            <div class="field">
+              <label>Приоритет</label>
+              <select id="priority">
+                <option value="low">🟢 Низкий</option>
+                <option value="medium">🟡 Средний</option>
+                <option value="high">🔴 Высокий</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Категория</label>
+              <input type="text" id="category" list="category-list" placeholder="Работа, Личное…">
+              <datalist id="category-list"></datalist>
+            </div>
+          </div>
+          <div class="row" style="margin-top:14px;">
+            <div class="field" style="flex:2;">
+              <label>Описание</label>
+              <input type="text" id="description" placeholder="Подробности (необязательно)">
+            </div>
+            <div class="field">
+              <label>🔔 Напомнить</label>
+              <select id="reminder">
+                <option value="">Не напоминать</option>
+                <option value="0">В момент времени</option>
+                <option value="5">За 5 минут</option>
+                <option value="15">За 15 минут</option>
+                <option value="30">За 30 минут</option>
+                <option value="60">За 1 час</option>
+                <option value="1440">За 1 день</option>
+              </select>
+            </div>
+          </div>
+          <div class="row" style="margin-top:14px;">
+            <button type="submit" id="submitBtn" style="flex:1;">Добавить</button>
+            <button type="button" class="secondary" id="cancelEditBtn" style="display:none; flex:1;">Отмена</button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+
+    <!-- ПРАВАЯ КОЛОНКА: фильтры + задачи -->
+    <div class="right-col">
+
+      <div class="card" id="filterCard">
+        <div class="filter-tabs" id="filterTabs">
+          <button class="filter-tab active" data-filter="all">Все <span class="count" id="tabAll">0</span></button>
+          <button class="filter-tab" data-filter="today">Сегодня <span class="count" id="tabToday">0</span></button>
+          <button class="filter-tab" data-filter="tomorrow">Завтра <span class="count" id="tabTomorrow">0</span></button>
+          <button class="filter-tab" data-filter="week">Неделя <span class="count" id="tabWeek">0</span></button>
+          <button class="filter-tab" data-filter="overdue">Просрочено <span class="count" id="tabOverdue">0</span></button>
+          <button class="filter-tab" data-filter="done">Выполнено <span class="count" id="tabDone">0</span></button>
+          <button class="filter-tab" data-filter="archive">Архив <span class="count" id="tabArchive">0</span></button>
+        </div>
+        <div class="search-row">
+          <div class="search-wrap">
+            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="7"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" id="searchInput" class="search-input" placeholder="Поиск по задачам…" autocomplete="off">
+            <button type="button" class="search-clear" id="searchClear" aria-label="Очистить">×</button>
+          </div>
+          <select id="sortSelect" style="min-width:160px; max-width:200px;">
+            <option value="date_asc">Сначала ближние</option>
+            <option value="date_desc">Сначала дальние</option>
+            <option value="priority">По приоритету</option>
+            <option value="created">Сначала новые</option>
+            <option value="manual">Мой порядок</option>
           </select>
+          <button class="secondary" id="printBtn" style="min-height:44px;">🖨️ Печать</button>
+          <button class="secondary" id="exportBtn" style="min-height:44px;">📥 Excel</button>
         </div>
-        <div class="field">
-          <label>Категория</label>
-          <input type="text" id="category" list="category-list" placeholder="Работа, Личное…">
-          <datalist id="category-list"></datalist>
-        </div>
-        <div class="field" style="flex:2;">
-          <label>Описание</label>
-          <input type="text" id="description" placeholder="Подробности (необязательно)">
-        </div>
-        <div class="field" style="flex:0 0 180px;">
-          <label>🔔 Напомнить</label>
-          <select id="reminder">
-            <option value="">Не напоминать</option>
-            <option value="0">В момент времени</option>
-            <option value="5">За 5 минут</option>
-            <option value="15">За 15 минут</option>
-            <option value="30">За 30 минут</option>
-            <option value="60">За 1 час</option>
-            <option value="1440">За 1 день</option>
-          </select>
-        </div>
-        <button type="submit" id="submitBtn">Добавить</button>
-        <button type="button" class="secondary" id="cancelEditBtn" style="display:none;">Отмена</button>
       </div>
-    </form>
-  </div>
 
-  <div class="card" id="filterCard">
-    <div class="filter-tabs" id="filterTabs">
-      <button class="filter-tab active" data-filter="all">Все <span class="count" id="tabAll">0</span></button>
-      <button class="filter-tab" data-filter="today">Сегодня <span class="count" id="tabToday">0</span></button>
-      <button class="filter-tab" data-filter="tomorrow">Завтра <span class="count" id="tabTomorrow">0</span></button>
-      <button class="filter-tab" data-filter="week">Неделя <span class="count" id="tabWeek">0</span></button>
-      <button class="filter-tab" data-filter="overdue">Просрочено <span class="count" id="tabOverdue">0</span></button>
-      <button class="filter-tab" data-filter="done">Выполнено <span class="count" id="tabDone">0</span></button>
-      <button class="filter-tab" data-filter="archive">Архив <span class="count" id="tabArchive">0</span></button>
-    </div>
-    <div class="search-row">
-      <div class="search-wrap">
-        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="11" cy="11" r="7"></circle>
-          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-        </svg>
-        <input type="text" id="searchInput" class="search-input" placeholder="Поиск по задачам…" autocomplete="off">
-        <button type="button" class="search-clear" id="searchClear" aria-label="Очистить">×</button>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title" id="listTitle">Задачи</div>
+        </div>
+        <div class="task-list" id="taskList"></div>
+        <div class="empty" id="emptyMsg" style="display:none;">Задач пока нет</div>
       </div>
-      <select id="sortSelect" style="min-width:180px; max-width:220px;">
-        <option value="date_asc">Сначала ближние</option>
-        <option value="date_desc">Сначала дальние</option>
-        <option value="priority">По приоритету</option>
-        <option value="created">Сначала новые</option>
-        <option value="manual">Мой порядок</option>
-      </select>
-      <button class="secondary" id="printBtn" style="min-height:44px;">🖨️ Печать</button>
-      <button class="secondary" id="exportBtn" style="min-height:44px;">📥 Excel</button>
-    </div>
-  </div>
 
-  <div class="card">
-    <div class="card-header">
-      <div class="card-title" id="listTitle">Задачи</div>
     </div>
-    <div class="task-list" id="taskList"></div>
-    <div class="empty" id="emptyMsg" style="display:none;">Задач пока нет</div>
+
   </div>
 
 </div>
@@ -652,9 +727,6 @@ const ARCHIVE_DAYS = 30;
 const REMINDER_CHECK_INTERVAL = 60000;
 console.log('[INIT] Планер запущен');
 
-// ============================================
-// СОСТОЯНИЕ
-// ============================================
 let allTasks = [];
 let archivedTasks = [];
 let unsubscribe = null;
@@ -665,18 +737,12 @@ let searchTimeout = null;
 let notifiedTaskIds = new Set(JSON.parse(localStorage.getItem('notified_task_ids') || '[]'));
 let draggedTaskId = null;
 
-// ============================================
-// ДАТЫ
-// ============================================
 function pad(n) { return String(n).padStart(2, '0'); }
 function dateToStr(d) { return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`; }
 function getTodayStr() { return dateToStr(new Date()); }
 function getTomorrowStr() { const d = new Date(); d.setDate(d.getDate()+1); return dateToStr(d); }
 function getWeekEndStr() { const d = new Date(); d.setDate(d.getDate()+7); return dateToStr(d); }
 
-// ============================================
-// TOAST
-// ============================================
 function showToast(message, type = 'info') {
   const container = document.getElementById('toastContainer');
   const toast = document.createElement('div');
@@ -692,9 +758,6 @@ function showToast(message, type = 'info') {
   }, 3500);
 }
 
-// ============================================
-// ТЕМА
-// ============================================
 document.getElementById('themeToggle').addEventListener('click', () => {
   const current = document.documentElement.getAttribute('data-theme');
   const next = current === 'dark' ? 'light' : 'dark';
@@ -708,11 +771,8 @@ document.getElementById('themeToggle').addEventListener('click', () => {
 function updateNotifBanner() {
   const banner = document.getElementById('notifBanner');
   if (!('Notification' in window)) return;
-  if (Notification.permission === 'default') {
-    banner.classList.add('visible');
-  } else {
-    banner.classList.remove('visible');
-  }
+  if (Notification.permission === 'default') banner.classList.add('visible');
+  else banner.classList.remove('visible');
 }
 
 document.getElementById('notifBtn').addEventListener('click', async () => {
@@ -732,19 +792,15 @@ document.getElementById('notifBtn').addEventListener('click', async () => {
 
 function checkReminders() {
   if (!('Notification' in window) || Notification.permission !== 'granted') return;
-
   const now = new Date();
   allTasks.forEach(t => {
     if (t.done || !t.reminder || t.reminder === '') return;
     if (!t.date || !t.time) return;
     if (notifiedTaskIds.has(t.id)) return;
-
     const taskTime = new Date(`${t.date}T${t.time}:00`);
     if (isNaN(taskTime.getTime())) return;
-
     const reminderMin = Number(t.reminder);
     const reminderTime = new Date(taskTime.getTime() - reminderMin * 60000);
-
     const diff = now - reminderTime;
     if (diff >= 0 && diff < 10 * 60000) {
       try {
@@ -764,28 +820,19 @@ function checkReminders() {
 }
 setInterval(checkReminders, REMINDER_CHECK_INTERVAL);
 
-// ============================================
-// АВТО-АРХИВАЦИЯ
-// ============================================
 async function autoArchive() {
   const cutoff = Date.now() - ARCHIVE_DAYS * 86400000;
   for (const t of allTasks) {
     if (t.done && !t.archived && t.doneAt) {
       const doneTime = t.doneAt?.toDate ? t.doneAt.toDate().getTime() : new Date(t.doneAt).getTime();
       if (doneTime < cutoff) {
-        try {
-          await updateDoc(doc(db, COLLECTION, t.id), { archived: true });
-        } catch (e) {
-          console.warn('Не удалось архивировать:', e);
-        }
+        try { await updateDoc(doc(db, COLLECTION, t.id), { archived: true }); }
+        catch (e) { console.warn('Не удалось архивировать:', e); }
       }
     }
   }
 }
 
-// ============================================
-// FIREBASE REALTIME
-// ============================================
 function subscribeToTasks() {
   if (unsubscribe) unsubscribe();
   const q = query(collection(db, COLLECTION));
@@ -809,9 +856,6 @@ function populateCategoryDatalist() {
   datalist.innerHTML = categories.map(c => `<option value="${c}">`).join('');
 }
 
-// ============================================
-// ФИЛЬТРАЦИЯ
-// ============================================
 function getFiltered() {
   const today = getTodayStr();
   const tomorrow = getTomorrowStr();
@@ -872,9 +916,6 @@ function updateTabCounts() {
   document.getElementById('tabArchive').textContent = archivedTasks.length;
 }
 
-// ============================================
-// ЭКРАНИРОВАНИЕ
-// ============================================
 function esc(s) {
   return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
 }
@@ -885,7 +926,6 @@ function formatDate(dateStr) {
   const tomorrow = getTomorrowStr();
   if (dateStr === today) return 'Сегодня';
   if (dateStr === tomorrow) return 'Завтра';
-
   const d = new Date(dateStr + 'T00:00:00');
   const months = ['янв','фев','мар','апр','мая','июн','июл','авг','сен','окт','ноя','дек'];
   const day = d.getDate();
@@ -901,9 +941,6 @@ function reminderLabel(r) {
   return '🔔 ' + (map[r] || r + ' мин');
 }
 
-// ============================================
-// ОТРИСОВКА
-// ============================================
 function render() {
   const list = document.getElementById('taskList');
   const emptyMsg = document.getElementById('emptyMsg');
@@ -933,13 +970,9 @@ function render() {
     list.innerHTML = '';
     emptyMsg.style.display = 'block';
     emptyMsg.classList.toggle('searching', !!searchQuery);
-    if (searchQuery) {
-      emptyMsg.textContent = `Ничего не найдено по запросу «${searchQuery}»`;
-    } else if (currentFilter === 'archive') {
-      emptyMsg.textContent = 'Архив пуст';
-    } else {
-      emptyMsg.textContent = 'Задач пока нет';
-    }
+    if (searchQuery) emptyMsg.textContent = `Ничего не найдено по запросу «${searchQuery}»`;
+    else if (currentFilter === 'archive') emptyMsg.textContent = 'Архив пуст';
+    else emptyMsg.textContent = 'Задач пока нет';
   } else {
     emptyMsg.style.display = 'none';
     const manualSort = document.getElementById('sortSelect').value === 'manual';
@@ -1005,9 +1038,6 @@ function render() {
   }
 }
 
-// ============================================
-// DRAG & DROP
-// ============================================
 function setupDragAndDrop() {
   const tasks = document.querySelectorAll('.task[draggable="true"]');
   tasks.forEach(task => {
@@ -1017,43 +1047,32 @@ function setupDragAndDrop() {
       e.dataTransfer.effectAllowed = 'move';
       e.dataTransfer.setData('text/plain', draggedTaskId);
     });
-
     task.addEventListener('dragend', () => {
       task.classList.remove('dragging');
       document.querySelectorAll('.task').forEach(t => t.classList.remove('drag-over'));
       draggedTaskId = null;
     });
-
     task.addEventListener('dragover', e => {
       e.preventDefault();
       if (task.dataset.id === draggedTaskId) return;
       document.querySelectorAll('.task').forEach(t => t.classList.remove('drag-over'));
       task.classList.add('drag-over');
     });
-
-    task.addEventListener('dragleave', () => {
-      task.classList.remove('drag-over');
-    });
-
+    task.addEventListener('dragleave', () => { task.classList.remove('drag-over'); });
     task.addEventListener('drop', async e => {
       e.preventDefault();
       task.classList.remove('drag-over');
       const targetId = task.dataset.id;
       const sourceId = e.dataTransfer.getData('text/plain') || draggedTaskId;
       if (!sourceId || sourceId === targetId) return;
-
       const visible = [...document.querySelectorAll('.task[draggable="true"]')];
       const ids = visible.map(el => el.dataset.id);
       const fromIdx = ids.indexOf(sourceId);
       const toIdx = ids.indexOf(targetId);
       if (fromIdx === -1 || toIdx === -1) return;
-
       ids.splice(fromIdx, 1);
       ids.splice(toIdx, 0, sourceId);
-
-      const updates = ids.map((id, index) =>
-        updateDoc(doc(db, COLLECTION, id), { order: index })
-      );
+      const updates = ids.map((id, index) => updateDoc(doc(db, COLLECTION, id), { order: index }));
       try {
         await Promise.all(updates);
         showToast('Порядок сохранён', 'success');
@@ -1065,9 +1084,6 @@ function setupDragAndDrop() {
   });
 }
 
-// ============================================
-// ДЕЙСТВИЯ
-// ============================================
 window.toggleDone = async (id, done) => {
   try {
     const update = { done: !!done, updatedAt: serverTimestamp() };
@@ -1116,9 +1132,6 @@ window.deleteTask = async (id) => {
   }
 };
 
-// ============================================
-// ДОБАВЛЕНИЕ / РЕДАКТИРОВАНИЕ
-// ============================================
 document.getElementById('addForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   const data = {
@@ -1161,9 +1174,6 @@ function cancelEdit() {
 }
 document.getElementById('cancelEditBtn').addEventListener('click', cancelEdit);
 
-// ============================================
-// ФИЛЬТРЫ / ПОИСК / СОРТИРОВКА
-// ============================================
 document.querySelectorAll('.filter-tab').forEach(tab => {
   tab.addEventListener('click', () => {
     document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
@@ -1196,16 +1206,8 @@ searchClear.addEventListener('click', () => {
 
 document.getElementById('sortSelect').addEventListener('change', render);
 
-// ============================================
-// ПЕЧАТЬ
-// ============================================
-document.getElementById('printBtn').addEventListener('click', () => {
-  window.print();
-});
+document.getElementById('printBtn').addEventListener('click', () => { window.print(); });
 
-// ============================================
-// ЭКСПОРТ
-// ============================================
 async function loadXLSX() {
   if (window.XLSX) return window.XLSX;
   return new Promise((resolve, reject) => {
@@ -1229,13 +1231,9 @@ document.getElementById('exportBtn').addEventListener('click', async () => {
     filtered.forEach(t => {
       aoa.push([
         t.done ? '✓' : '',
-        t.title || '',
-        t.description || '',
-        t.date || '',
-        t.time || '',
+        t.title || '', t.description || '', t.date || '', t.time || '',
         t.priority === 'high' ? 'Высокий' : t.priority === 'medium' ? 'Средний' : 'Низкий',
-        t.category || '',
-        reminderLabel(t.reminder)
+        t.category || '', reminderLabel(t.reminder)
       ]);
     });
     const ws = XLSX.utils.aoa_to_sheet(aoa);
@@ -1254,9 +1252,6 @@ document.getElementById('exportBtn').addEventListener('click', async () => {
   }
 });
 
-// ============================================
-// СТАРТ
-// ============================================
 document.getElementById('date').valueAsDate = new Date();
 updateNotifBanner();
 subscribeToTasks();
