@@ -165,6 +165,16 @@
     @keyframes slideIn { from { transform: translateX(110%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
     @keyframes slideOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(110%); opacity: 0; } }
     @keyframes modalIn { from { opacity: 0; transform: translateY(20px) scale(0.96); } to { opacity: 1; transform: translateY(0) scale(1); } }
+    @keyframes weekInFromRight {
+      from { opacity: 0; transform: translateX(48px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes weekInFromLeft {
+      from { opacity: 0; transform: translateX(-48px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    .week-view.animate-right { animation: weekInFromRight 0.4s cubic-bezier(0.16,1,0.3,1); }
+    .week-view.animate-left { animation: weekInFromLeft 0.4s cubic-bezier(0.16,1,0.3,1); }
 
     .card {
       background: var(--surface); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
@@ -180,7 +190,6 @@
       border-radius: 2px;
     }
 
-    /* Прогресс-карта */
     .progress-row {
       display: grid; grid-template-columns: minmax(0, 1fr) auto;
       gap: 16px; align-items: center; margin-bottom: 14px;
@@ -207,11 +216,8 @@
     .progress-stat-value.medium { color: var(--medium); }
     .progress-stat-value.low { color: var(--low); }
 
-    /* Панель управления */
     .controls-card { padding: 16px 20px; }
-    .controls-row {
-      display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
-    }
+    .controls-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
     .week-nav { display: flex; gap: 6px; align-items: center; flex-shrink: 0; }
     .week-nav button {
       width: 36px; height: 36px; padding: 0; min-height: auto;
@@ -266,7 +272,6 @@
     }
     .toggle-btn.active:hover { filter: brightness(1.06); color: #fff; transform: translateY(-1px); }
 
-    /* Kanban недели */
     .week-view {
       display: grid;
       grid-template-columns: repeat(5, minmax(0, 1fr));
@@ -325,6 +330,7 @@
     .day-tasks {
       display: flex; flex-direction: column; gap: 8px;
       flex: 1; min-width: 0;
+      min-height: 40px;
     }
 
     .task-card {
@@ -344,6 +350,18 @@
     .task-card.done { opacity: 0.5; }
     .task-card.done .task-card-title { text-decoration: line-through; color: var(--text-muted); }
     .task-card.overdue { box-shadow: 0 0 0 1px var(--high-border) inset; }
+    .task-card[draggable="true"] { cursor: grab; }
+    .task-card.dragging { opacity: 0.35; cursor: grabbing; transform: scale(0.97); }
+    .task-card.drag-over { box-shadow: 0 -3px 0 var(--pink) inset; }
+    .day-column.drag-over-column {
+      background: linear-gradient(180deg, rgba(236,72,153,0.1) 0%, var(--surface) 80%);
+      border-color: var(--pink);
+      border-style: dashed;
+      box-shadow: var(--shadow-md);
+    }
+    [data-theme="dark"] .day-column.drag-over-column {
+      background: linear-gradient(180deg, rgba(244,114,182,0.14) 0%, var(--surface) 80%);
+    }
 
     .task-card-top {
       display: flex; align-items: flex-start; gap: 8px;
@@ -436,7 +454,6 @@
       font-style: italic;
     }
 
-    /* Модальное окно */
     .modal-overlay {
       position: fixed; inset: 0; z-index: 9998;
       background: rgba(31,20,32,0.5);
@@ -489,7 +506,6 @@
     }
     .modal-footer button { flex: 1; }
 
-    /* Универсальные стили */
     .field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
     label { font-size: 0.6875rem; font-weight: 600; color: var(--text-muted); letter-spacing: 0.04em; text-transform: uppercase; }
     input, select {
@@ -527,7 +543,6 @@
     }
     button.secondary:hover { background: var(--surface-hover); border-color: var(--pink-light); filter: none; color: var(--pink-dark); }
 
-    /* Toast */
     .toast-container {
       position: fixed; top: 24px; right: 24px; z-index: 9999;
       display: flex; flex-direction: column; gap: 12px; pointer-events: none;
@@ -547,7 +562,6 @@
     .toast-message { flex: 1; word-break: break-word; }
     .toast.hiding { animation: slideOut 0.3s ease forwards; }
 
-    /* Notif banner */
     .notif-banner {
       display: none;
       align-items: center; gap: 14px;
@@ -560,7 +574,6 @@
     .notif-text { flex: 1; min-width: 0; font-size: 0.75rem; color: var(--text-muted); }
     .notif-text strong { display: block; color: var(--text); font-size: 0.8125rem; font-weight: 700; margin-bottom: 2px; }
 
-    /* Плавающая кнопка добавления */
     .fab {
       position: fixed; bottom: calc(24px + env(safe-area-inset-bottom));
       right: calc(24px + env(safe-area-inset-right));
@@ -666,7 +679,6 @@
     <button id="notifBtn" style="min-height:36px; padding:8px 16px;">Разрешить</button>
   </div>
 
-  <!-- Прогресс -->
   <div class="card" style="margin-bottom:16px;">
     <div class="progress-row">
       <div>
@@ -695,7 +707,6 @@
     </div>
   </div>
 
-  <!-- Управление -->
   <div class="card controls-card" style="margin-bottom:16px;">
     <div class="controls-row">
       <div class="week-nav">
@@ -729,15 +740,12 @@
     </div>
   </div>
 
-  <!-- Kanban: неделя -->
   <div class="week-view" id="weekView"></div>
 
 </div>
 
-<!-- Плавающая кнопка -->
 <button class="fab" id="fab" title="Новая задача">+</button>
 
-<!-- Модальное окно -->
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal">
     <div class="modal-header">
@@ -833,7 +841,7 @@ const db = initializeFirestore(app, {
 const COLLECTION = 'planner_tasks';
 const ARCHIVE_DAYS = 30;
 const REMINDER_CHECK_INTERVAL = 60000;
-console.log('[INIT] Планер (недельный вид)');
+console.log('[INIT] Планер (недельный вид + drag&drop)');
 
 let allTasks = [];
 let archivedTasks = [];
@@ -846,6 +854,7 @@ let showDone = true;
 let showArchive = false;
 let currentWeekStart = getWeekStart(new Date());
 let notifiedTaskIds = new Set(JSON.parse(localStorage.getItem('notified_task_ids') || '[]'));
+let draggedTaskId = null;
 
 function pad(n) { return String(n).padStart(2, '0'); }
 function dateToStr(d) { return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`; }
@@ -962,14 +971,115 @@ function populateCategoryDatalist() {
   datalist.innerHTML = categories.map(c => `<option value="${c}">`).join('');
 }
 
-// ==================== РЕНДЕР НЕДЕЛИ ====================
+// ==================== DRAG & DROP ====================
+function setupDragAndDrop() {
+  const cards = document.querySelectorAll('.task-card');
+  const columns = document.querySelectorAll('.day-column');
+
+  cards.forEach(card => {
+    card.setAttribute('draggable', 'true');
+
+    card.addEventListener('dragstart', e => {
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', card.dataset.id);
+      draggedTaskId = card.dataset.id;
+      card.classList.add('dragging');
+    });
+
+    card.addEventListener('dragend', () => {
+      card.classList.remove('dragging');
+      document.querySelectorAll('.task-card').forEach(c => c.classList.remove('drag-over'));
+      document.querySelectorAll('.day-column').forEach(c => c.classList.remove('drag-over-column'));
+      draggedTaskId = null;
+    });
+
+    card.addEventListener('dragover', e => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      if (card.dataset.id !== draggedTaskId) card.classList.add('drag-over');
+    });
+
+    card.addEventListener('dragleave', () => card.classList.remove('drag-over'));
+
+    card.addEventListener('drop', async e => {
+      e.preventDefault();
+      e.stopPropagation();
+      card.classList.remove('drag-over');
+      const col = card.closest('.day-column');
+      if (col) await handleDrop(card.dataset.id, col.dataset.date);
+    });
+  });
+
+  columns.forEach(col => {
+    col.addEventListener('dragover', e => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      col.classList.add('drag-over-column');
+    });
+
+    col.addEventListener('dragleave', e => {
+      if (!col.contains(e.relatedTarget)) col.classList.remove('drag-over-column');
+    });
+
+    col.addEventListener('drop', async e => {
+      e.preventDefault();
+      col.classList.remove('drag-over-column');
+      await handleDrop(null, col.dataset.date);
+    });
+  });
+}
+
+async function handleDrop(targetId, targetDate) {
+  const sourceId = draggedTaskId;
+  if (!sourceId) return;
+
+  const all = [...allTasks, ...archivedTasks];
+  const source = all.find(t => t.id === sourceId);
+  if (!source || !targetDate) return;
+  if (sourceId === targetId) return;
+
+  const dateChanged = source.date !== targetDate;
+
+  try {
+    if (dateChanged) {
+      await updateDoc(doc(db, COLLECTION, sourceId), {
+        date: targetDate,
+        updatedAt: serverTimestamp()
+      });
+      showToast('Задача перенесена', 'success');
+    }
+
+    const targetCol = document.querySelector(`.day-column[data-date="${targetDate}"]`);
+    if (targetCol) {
+      let ids = [...targetCol.querySelectorAll('.task-card')].map(c => c.dataset.id);
+      ids = ids.filter(id => id !== sourceId);
+
+      if (targetId) {
+        const idx = ids.indexOf(targetId);
+        if (idx >= 0) ids.splice(idx, 0, sourceId);
+        else ids.push(sourceId);
+      } else {
+        ids.push(sourceId);
+      }
+
+      const updates = ids.map((id, i) =>
+        updateDoc(doc(db, COLLECTION, id), { order: i })
+      );
+      await Promise.all(updates);
+    }
+  } catch (err) {
+    console.error('Drop error:', err);
+    showToast('Ошибка: ' + err.message, 'error');
+  }
+}
+
+// ==================== РЕНДЕР ====================
 function renderWeek() {
   const view = document.getElementById('weekView');
   const monthShort = ['янв','фев','мар','апр','мая','июн','июл','авг','сен','окт','ноя','дек'];
   const dayNames = ['Понедельник','Вторник','Среда','Четверг','Пятница'];
   const todayStr = getTodayStr();
 
-  // Метка недели
   const weekEnd = addDays(currentWeekStart, 4);
   const label = document.getElementById('weekLabel');
   const startDay = currentWeekStart.getDate();
@@ -981,7 +1091,6 @@ function renderWeek() {
     ? `${startDay}–${endDay} ${startMonth} ${year}`
     : `${startDay} ${startMonth} – ${endDay} ${endMonth} ${year}`;
 
-  // Задачи для отображения
   const sourceTasks = showArchive ? archivedTasks : allTasks;
 
   let html = '';
@@ -990,7 +1099,6 @@ function renderWeek() {
     const dateStr = dateToStr(d);
     const isToday = dateStr === todayStr;
 
-    // Фильтрация задач на этот день
     let dayTasks = sourceTasks.filter(t => t.date === dateStr);
     if (!showDone && !showArchive) dayTasks = dayTasks.filter(t => !t.done);
     if (priorityFilter !== 'all') dayTasks = dayTasks.filter(t => t.priority === priorityFilter);
@@ -1001,9 +1109,11 @@ function renderWeek() {
       });
     }
 
-    // Сортировка: сначала по времени, потом по приоритету
     const priorityOrder = { high: 0, medium: 1, low: 2 };
     dayTasks.sort((a, b) => {
+      const ao = a.order ?? Number.MAX_SAFE_INTEGER;
+      const bo = b.order ?? Number.MAX_SAFE_INTEGER;
+      if (ao !== bo) return ao - bo;
       const at = a.time || '99:99';
       const bt = b.time || '99:99';
       if (at !== bt) return at.localeCompare(bt);
@@ -1011,7 +1121,7 @@ function renderWeek() {
     });
 
     html += `
-      <div class="day-column ${isToday ? 'today' : ''}">
+      <div class="day-column ${isToday ? 'today' : ''}" data-date="${dateStr}">
         <div class="day-header">
           <div class="day-header-info">
             <div class="day-name">${dayNames[i]}</div>
@@ -1030,6 +1140,7 @@ function renderWeek() {
   }
 
   view.innerHTML = html;
+  setupDragAndDrop();
 }
 
 function renderTaskCard(t, dateStr) {
@@ -1069,7 +1180,6 @@ function renderTaskCard(t, dateStr) {
 }
 
 function renderProgress() {
-  // Прогресс по текущей неделе
   const weekDates = [];
   for (let i = 0; i < 5; i++) weekDates.push(dateToStr(addDays(currentWeekStart, i)));
 
@@ -1088,7 +1198,6 @@ function renderProgress() {
   document.getElementById('lowCount').textContent = notDone.filter(t => t.priority === 'low').length;
 }
 
-// ==================== ХЕЛПЕРЫ ====================
 function esc(s) {
   return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
 }
@@ -1202,22 +1311,27 @@ document.getElementById('taskForm').addEventListener('submit', async (e) => {
   }
 });
 
-// ==================== НАВИГАЦИЯ ====================
-document.getElementById('prevWeek').addEventListener('click', () => {
-  currentWeekStart = addDays(currentWeekStart, -7);
+// ==================== НАВИГАЦИЯ С АНИМАЦИЕЙ ====================
+function navigateWeek(direction) {
+  if (direction === 'prev') currentWeekStart = addDays(currentWeekStart, -7);
+  if (direction === 'next') currentWeekStart = addDays(currentWeekStart, 7);
+  if (direction === 'today') currentWeekStart = getWeekStart(new Date());
+
   renderWeek();
   renderProgress();
-});
-document.getElementById('nextWeek').addEventListener('click', () => {
-  currentWeekStart = addDays(currentWeekStart, 7);
-  renderWeek();
-  renderProgress();
-});
-document.getElementById('todayBtn').addEventListener('click', () => {
-  currentWeekStart = getWeekStart(new Date());
-  renderWeek();
-  renderProgress();
-});
+
+  if (direction !== 'today') {
+    const view = document.getElementById('weekView');
+    view.classList.remove('animate-left', 'animate-right');
+    void view.offsetWidth;
+    view.classList.add(direction === 'next' ? 'animate-right' : 'animate-left');
+    setTimeout(() => view.classList.remove('animate-left', 'animate-right'), 450);
+  }
+}
+
+document.getElementById('prevWeek').addEventListener('click', () => navigateWeek('prev'));
+document.getElementById('nextWeek').addEventListener('click', () => navigateWeek('next'));
+document.getElementById('todayBtn').addEventListener('click', () => navigateWeek('today'));
 
 // ==================== ФИЛЬТРЫ ====================
 const searchInput = document.getElementById('searchInput');
