@@ -106,7 +106,7 @@
       background: linear-gradient(180deg, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0) 30%, rgba(255,255,255,0) 70%, rgba(255,255,255,0.25) 100%);
     }
     [data-theme="dark"] body::after { opacity: 0; }
-    .container { max-width: 1200px; margin: 0 auto; position: relative; z-index: 1; }
+    .container { max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; }
 
     .theme-toggle {
       width: 44px; height: 44px; border-radius: 50%;
@@ -199,94 +199,19 @@
     .progress-stat-value.medium { color: var(--medium); }
     .progress-stat-value.low { color: var(--low); }
 
-    /* ==== КАЛЕНДАРЬ ==== */
-    .calendar-card { padding: 20px 24px; }
-    .calendar-header {
-      display: flex; align-items: center; justify-content: space-between;
-      margin-bottom: 16px;
-    }
-    .calendar-nav {
-      display: flex; gap: 6px; align-items: center;
-    }
-    .calendar-nav button {
-      width: 34px; height: 34px; padding: 0; min-height: auto;
-      background: var(--surface-alt); color: var(--text-muted);
-      border: 1px solid var(--border); border-radius: 8px;
-      display: flex; align-items: center; justify-content: center;
-      box-shadow: none; transition: all var(--transition-fast);
-    }
-    .calendar-nav button:hover {
-      background: var(--surface-solid); color: var(--text);
-      border-color: var(--border-strong); filter: none; transform: none;
-    }
-    .calendar-month-label {
-      font-size: 1rem; font-weight: 700; color: var(--text);
-      text-transform: capitalize; min-width: 140px;
-    }
-    .calendar-grid {
-      display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px;
-    }
-    .calendar-weekday {
-      font-size: 0.6875rem; font-weight: 700; color: var(--text-subtle);
-      text-transform: uppercase; letter-spacing: 0.06em;
-      text-align: center; padding: 6px 0;
-    }
-    .calendar-day {
-      aspect-ratio: 1 / 1;
-      border-radius: 8px; border: 1px solid transparent;
-      background: transparent; cursor: pointer;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      padding: 4px 2px; gap: 3px;
-      transition: all var(--transition-fast);
-      position: relative;
-      font-family: var(--font);
-      min-height: auto; box-shadow: none;
-    }
-    .calendar-day:hover {
-      background: var(--surface-alt); border-color: var(--border);
-      filter: none; transform: none;
-    }
-    .calendar-day.other-month { opacity: 0.3; }
-    .calendar-day.today {
-      background: linear-gradient(135deg, rgba(139,92,246,0.12) 0%, rgba(59,130,246,0.1) 100%);
-      border-color: rgba(139,92,246,0.4);
-    }
-    .calendar-day.today .calendar-day-num { color: var(--purple); font-weight: 800; }
-    .calendar-day.selected {
-      background: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%);
-      border-color: transparent;
-    }
-    .calendar-day.selected .calendar-day-num { color: #fff; font-weight: 800; }
-    .calendar-day.selected .calendar-dot { background: rgba(255,255,255,0.9) !important; }
-    .calendar-day-num {
-      font-size: 0.8125rem; font-weight: 500; color: var(--text);
-      line-height: 1;
-    }
-    .calendar-dots {
-      display: flex; gap: 2px; height: 5px;
-    }
-    .calendar-dot {
-      width: 4px; height: 4px; border-radius: 50%;
-    }
-    .calendar-dot.high { background: var(--high); }
-    .calendar-dot.medium { background: var(--medium); }
-    .calendar-dot.low { background: var(--low); }
-    .calendar-dot.done { background: var(--text-subtle); }
-
     .row { display: flex; gap: 14px; flex-wrap: wrap; align-items: flex-end; }
     .field { display: flex; flex-direction: column; gap: 8px; flex: 1; min-width: 140px; }
     label { font-size: 0.75rem; font-weight: 600; color: var(--text-muted); letter-spacing: 0.03em; text-transform: uppercase; }
-    input, select, textarea {
+    input, select {
       font-family: var(--font); font-size: 1rem; padding: 12px 14px;
       color: var(--text); background: var(--surface-solid);
       border: 1px solid var(--border-strong); border-radius: 8px;
       outline: none; width: 100%; min-height: 48px;
       transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
     }
-    textarea { min-height: 80px; resize: vertical; font-size: 0.9375rem; }
-    input:hover, select:hover, textarea:hover { border-color: var(--text-subtle); }
-    input:focus, select:focus, textarea:focus { border-color: #8b5cf6; box-shadow: 0 0 0 4px rgba(139,92,246,0.15); }
-    input::placeholder, textarea::placeholder { color: var(--text-subtle); }
+    input:hover, select:hover { border-color: var(--text-subtle); }
+    input:focus, select:focus { border-color: #8b5cf6; box-shadow: 0 0 0 4px rgba(139,92,246,0.15); }
+    input::placeholder { color: var(--text-subtle); }
     select {
       appearance: none;
       background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
@@ -454,7 +379,6 @@
     .toast-message { flex: 1; word-break: break-word; line-height: 1.4; }
     .toast.hiding { animation: slideOut 0.3s ease forwards; }
 
-    /* ==== NOTIFICATION PERMISSION BANNER ==== */
     .notif-banner {
       display: none;
       align-items: center; gap: 14px;
@@ -468,16 +392,12 @@
     .notif-text { flex: 1; min-width: 0; font-size: 0.8125rem; color: var(--text-muted); }
     .notif-text strong { display: block; color: var(--text); font-size: 0.875rem; font-weight: 700; margin-bottom: 2px; }
 
-    /* ==== PRINT STYLES ==== */
     @media print {
-      body {
-        background: #fff !important;
-        padding: 20px !important;
-      }
+      body { background: #fff !important; padding: 20px !important; }
       body::before, body::after { display: none !important; }
       .theme-toggle, .user-info, .page-subtitle,
       #formCard, #filterCard, .progress-card,
-      .calendar-card, .task-actions, .drag-handle,
+      .task-actions, .drag-handle,
       .notif-banner, .toast-container,
       button, .search-row, .filter-tabs,
       .page-header .user-info { display: none !important; }
@@ -527,8 +447,6 @@
       .progress-stats { gap: 16px; }
       .toast-container { top: 12px; right: 12px; left: 12px; }
       .toast { min-width: auto; width: 100%; }
-      .calendar-day { font-size: 0.75rem; }
-      .calendar-day-num { font-size: 0.75rem; }
     }
   </style>
 </head>
@@ -561,7 +479,6 @@
     </div>
   </div>
 
-  <!-- Баннер разрешения уведомлений -->
   <div class="notif-banner" id="notifBanner">
     <div class="notif-icon">🔔</div>
     <div class="notif-text">
@@ -571,7 +488,6 @@
     <button id="notifBtn" style="min-height:40px;">Разрешить</button>
   </div>
 
-  <!-- Прогресс -->
   <div class="card progress-card">
     <div class="progress-header">
       <div>
@@ -602,33 +518,6 @@
     </div>
   </div>
 
-  <!-- Календарь -->
-  <div class="card calendar-card">
-    <div class="calendar-header">
-      <div class="calendar-month-label" id="calendarLabel"></div>
-      <div class="calendar-nav">
-        <button id="calPrev" title="Предыдущий месяц">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;"><polyline points="15 18 9 12 15 6"></polyline></svg>
-        </button>
-        <button id="calToday" class="secondary" style="min-height:34px;padding:0 12px;font-size:0.75rem;">Сегодня</button>
-        <button id="calNext" title="Следующий месяц">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;"><polyline points="9 18 15 12 9 6"></polyline></svg>
-        </button>
-      </div>
-    </div>
-    <div class="calendar-grid">
-      <div class="calendar-weekday">Пн</div>
-      <div class="calendar-weekday">Вт</div>
-      <div class="calendar-weekday">Ср</div>
-      <div class="calendar-weekday">Чт</div>
-      <div class="calendar-weekday">Пт</div>
-      <div class="calendar-weekday">Сб</div>
-      <div class="calendar-weekday">Вс</div>
-    </div>
-    <div class="calendar-grid" id="calendarGrid" style="margin-top:6px;"></div>
-  </div>
-
-  <!-- Форма -->
   <div class="card" id="formCard">
     <div class="card-header">
       <div class="card-title" id="formTitle">Новая задача</div>
@@ -684,7 +573,6 @@
     </form>
   </div>
 
-  <!-- Фильтры -->
   <div class="card" id="filterCard">
     <div class="filter-tabs" id="filterTabs">
       <button class="filter-tab active" data-filter="all">Все <span class="count" id="tabAll">0</span></button>
@@ -716,7 +604,6 @@
     </div>
   </div>
 
-  <!-- Задачи -->
   <div class="card">
     <div class="card-header">
       <div class="card-title" id="listTitle">Задачи</div>
@@ -762,22 +649,19 @@ const db = initializeFirestore(app, {
 
 const COLLECTION = 'planner_tasks';
 const ARCHIVE_DAYS = 30;
-const REMINDER_CHECK_INTERVAL = 60000; // 1 минута
+const REMINDER_CHECK_INTERVAL = 60000;
 console.log('[INIT] Планер запущен');
 
 // ============================================
 // СОСТОЯНИЕ
 // ============================================
-let allTasks = [];       // активные задачи (не в архиве)
-let archivedTasks = [];  // архивные
+let allTasks = [];
+let archivedTasks = [];
 let unsubscribe = null;
 let editingId = null;
 let currentFilter = 'all';
-let selectedDate = null; // для календаря
 let searchQuery = '';
 let searchTimeout = null;
-let currentMonth = new Date();
-currentMonth.setDate(1);
 let notifiedTaskIds = new Set(JSON.parse(localStorage.getItem('notified_task_ids') || '[]'));
 let draggedTaskId = null;
 
@@ -840,14 +724,12 @@ document.getElementById('notifBtn').addEventListener('click', async () => {
   if (perm === 'granted') {
     showToast('Уведомления включены!', 'success');
     updateNotifBanner();
-    // Показать тестовое
     new Notification('Планер', { body: 'Напоминания успешно включены', icon: 'icon.svg' });
   } else {
     showToast('Не удалось включить уведомления', 'info');
   }
 });
 
-// Проверка напоминаний каждую минуту
 function checkReminders() {
   if (!('Notification' in window) || Notification.permission !== 'granted') return;
 
@@ -863,7 +745,6 @@ function checkReminders() {
     const reminderMin = Number(t.reminder);
     const reminderTime = new Date(taskTime.getTime() - reminderMin * 60000);
 
-    // Если время напоминания пришло и прошло не более 10 минут назад
     const diff = now - reminderTime;
     if (diff >= 0 && diff < 10 * 60000) {
       try {
@@ -914,9 +795,7 @@ function subscribeToTasks() {
     archivedTasks = all.filter(t => t.archived);
     populateCategoryDatalist();
     updateTabCounts();
-    renderCalendar();
     render();
-    // Авто-архивация в фоне
     setTimeout(autoArchive, 1000);
   }, err => {
     console.error('Ошибка загрузки:', err);
@@ -946,7 +825,6 @@ function getFiltered() {
     if (currentFilter === 'week') return t.date >= today && t.date <= weekEnd && !t.done;
     if (currentFilter === 'overdue') return t.date < today && !t.done;
     if (currentFilter === 'done') return t.done === true;
-    if (currentFilter === 'date' && selectedDate) return t.date === selectedDate;
     return true;
   });
 
@@ -995,116 +873,6 @@ function updateTabCounts() {
 }
 
 // ============================================
-// КАЛЕНДАРЬ
-// ============================================
-function renderCalendar() {
-  const grid = document.getElementById('calendarGrid');
-  const label = document.getElementById('calendarLabel');
-  const year = currentMonth.getFullYear();
-  const month = currentMonth.getMonth();
-
-  const monthNames = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
-  label.textContent = `${monthNames[month]} ${year}`;
-
-  // Первый день месяца (сдвиг с понедельника)
-  const firstDay = new Date(year, month, 1);
-  let startOffset = firstDay.getDay() - 1;
-  if (startOffset < 0) startOffset = 6; // воскресенье → 6
-
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-  const prevMonthDays = new Date(year, month, 0).getDate();
-
-  const todayStr = getTodayStr();
-  let html = '';
-
-  // Дни предыдущего месяца
-  for (let i = startOffset - 1; i >= 0; i--) {
-    const day = prevMonthDays - i;
-    const d = new Date(year, month - 1, day);
-    const dateStr = dateToStr(d);
-    html += renderDayCell(day, dateStr, todayStr, true);
-  }
-
-  // Дни текущего месяца
-  for (let day = 1; day <= daysInMonth; day++) {
-    const dateStr = dateToStr(new Date(year, month, day));
-    html += renderDayCell(day, dateStr, todayStr, false);
-  }
-
-  // Дни следующего месяца (заполняем до 42 ячеек — 6 недель)
-  const totalCells = 42;
-  const remaining = totalCells - (startOffset + daysInMonth);
-  for (let day = 1; day <= remaining; day++) {
-    const d = new Date(year, month + 1, day);
-    const dateStr = dateToStr(d);
-    html += renderDayCell(day, dateStr, todayStr, true);
-  }
-
-  grid.innerHTML = html;
-
-  // Обработчики на дни
-  grid.querySelectorAll('.calendar-day').forEach(el => {
-    el.addEventListener('click', () => {
-      const dateStr = el.dataset.date;
-      if (selectedDate === dateStr) {
-        // снять выбор
-        selectedDate = null;
-        currentFilter = 'all';
-        document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
-        document.querySelector('.filter-tab[data-filter="all"]').classList.add('active');
-      } else {
-        selectedDate = dateStr;
-        currentFilter = 'date';
-        document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
-      }
-      renderCalendar();
-      render();
-    });
-  });
-}
-
-function renderDayCell(day, dateStr, todayStr, otherMonth) {
-  const classes = ['calendar-day'];
-  if (otherMonth) classes.push('other-month');
-  if (dateStr === todayStr) classes.push('today');
-  if (dateStr === selectedDate) classes.push('selected');
-
-  // Считаем задачи на этот день
-  const dayTasks = allTasks.filter(t => t.date === dateStr);
-  let dotsHtml = '';
-  if (dayTasks.length > 0) {
-    const maxDots = 3;
-    const shown = dayTasks.slice(0, maxDots);
-    dotsHtml = '<div class="calendar-dots">';
-    shown.forEach(t => {
-      let cls = 'done';
-      if (!t.done) cls = t.priority || 'low';
-      dotsHtml += `<span class="calendar-dot ${cls}"></span>`;
-    });
-    dotsHtml += '</div>';
-  }
-
-  return `<button class="${classes.join(' ')}" data-date="${dateStr}">
-    <span class="calendar-day-num">${day}</span>
-    ${dotsHtml}
-  </button>`;
-}
-
-document.getElementById('calPrev').addEventListener('click', () => {
-  currentMonth.setMonth(currentMonth.getMonth() - 1);
-  renderCalendar();
-});
-document.getElementById('calNext').addEventListener('click', () => {
-  currentMonth.setMonth(currentMonth.getMonth() + 1);
-  renderCalendar();
-});
-document.getElementById('calToday').addEventListener('click', () => {
-  currentMonth = new Date();
-  currentMonth.setDate(1);
-  renderCalendar();
-});
-
-// ============================================
 // ЭКРАНИРОВАНИЕ
 // ============================================
 function esc(s) {
@@ -1142,7 +910,6 @@ function render() {
   const listTitle = document.getElementById('listTitle');
   const filtered = getFiltered();
 
-  // Прогресс на сегодня
   const today = getTodayStr();
   const todayTasks = allTasks.filter(t => t.date === today);
   const todayDone = todayTasks.filter(t => t.done).length;
@@ -1159,9 +926,7 @@ function render() {
   document.getElementById('mediumCount').textContent = todayNotDone.filter(t => t.priority === 'medium').length;
   document.getElementById('lowCount').textContent = todayNotDone.filter(t => t.priority === 'low').length;
 
-  // Заголовок списка
   if (currentFilter === 'archive') listTitle.textContent = 'Архив';
-  else if (currentFilter === 'date' && selectedDate) listTitle.textContent = `Задачи на ${formatDate(selectedDate)}`;
   else listTitle.textContent = 'Задачи';
 
   if (filtered.length === 0) {
@@ -1234,7 +999,6 @@ function render() {
       `;
     }).join('');
 
-    // Drag & Drop
     if (manualSort && currentFilter !== 'archive') {
       setupDragAndDrop();
     }
@@ -1278,18 +1042,15 @@ function setupDragAndDrop() {
       const sourceId = e.dataTransfer.getData('text/plain') || draggedTaskId;
       if (!sourceId || sourceId === targetId) return;
 
-      // Получаем текущий порядок отображённых задач
       const visible = [...document.querySelectorAll('.task[draggable="true"]')];
       const ids = visible.map(el => el.dataset.id);
       const fromIdx = ids.indexOf(sourceId);
       const toIdx = ids.indexOf(targetId);
       if (fromIdx === -1 || toIdx === -1) return;
 
-      // Переставляем в массиве
       ids.splice(fromIdx, 1);
       ids.splice(toIdx, 0, sourceId);
 
-      // Обновляем order в Firestore
       const updates = ids.map((id, index) =>
         updateDoc(doc(db, COLLECTION, id), { order: index })
       );
@@ -1408,8 +1169,6 @@ document.querySelectorAll('.filter-tab').forEach(tab => {
     document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
     tab.classList.add('active');
     currentFilter = tab.dataset.filter;
-    if (currentFilter !== 'date') selectedDate = null;
-    renderCalendar();
     render();
   });
 });
