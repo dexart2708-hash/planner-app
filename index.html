@@ -163,9 +163,10 @@
     /* ==== ДВУХКОЛОНОЧНАЯ РАСКЛАДКА ==== */
     .main-layout {
       display: grid;
-      grid-template-columns: minmax(360px, 460px) 1fr;
+      grid-template-columns: minmax(0, 460px) minmax(0, 1fr);
       gap: 20px;
       align-items: start;
+      min-width: 0;
     }
     .left-col, .right-col {
       display: flex;
@@ -470,15 +471,45 @@
 
     @media (max-width: 1000px) {
       .main-layout {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
       }
       .left-col {
         position: static;
         max-height: none;
         overflow-y: visible;
+        min-width: 0;
       }
       .right-col {
         min-height: auto;
+        min-width: 0;
+      }
+    }
+
+    @media (max-width: 720px) {
+      html, body {
+        overflow-x: hidden;
+        max-width: 100%;
+      }
+      .container {
+        max-width: 100%;
+        padding: 0;
+      }
+      .card, .page-header, .notif-banner,
+      .main-layout, .left-col, .right-col,
+      .task, .filter-tabs, .search-row {
+        max-width: 100%;
+        box-sizing: border-box;
+      }
+      .field {
+        min-width: 0;
+        width: 100%;
+      }
+      input, select, button {
+        max-width: 100%;
+      }
+      /* Отступ снизу — чтобы кнопка не пряталась за адресной строкой Safari */
+      body {
+        padding-bottom: calc(80px + env(safe-area-inset-bottom)) !important;
       }
     }
 
